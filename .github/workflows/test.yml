@@ -13,8 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ["3.10", "3.11"] # List the Python versions you want to test
-
+        python-version: ["3.10", "3.11"]
     steps:
       - uses: actions/checkout@v4
       - name: Install Python ${{ matrix.python-version }}
@@ -39,14 +38,11 @@ jobs:
       - name: Run tests
         run: uv run pytest tests
 
-      - name: Install pytest-cov
-        run: uv pip install pytest-cov
-
       - name: Run tests with coverage
-        run: uv run pytest --cov=fast-anime tests
+        run: uv run pytest --cov=./fastanime --cov-report=html tests
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
-          path: .coverage
+          path: htmlcov
