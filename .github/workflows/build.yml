@@ -1,4 +1,4 @@
-name: Run build
+name: "Run build"
 on:
   workflow_dispatch:
   push:
@@ -10,6 +10,7 @@ on:
       - completed
 jobs:
   debug_build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -26,9 +27,29 @@ jobs:
       - name: Build fastanime
         run: uv build
 
+      - name: Generate build report
+        run: |
+          echo "## Build Report" > dist/build_report.md
+          echo "" >> dist/build_report.md
+          echo "**Timestamp:** $(date)" >> dist/build_report.md
+          echo "**Commit SHA:** ${GITHUB_SHA}" >> dist/build_report.md
+          echo "**Workflow Run:** ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" >> dist/build_report.md
+          echo "**Python Version:** $(python --version)" >> dist/build_report.md
+          echo "**uv Version:** $(uv --version)" >> dist/build_report.md
+          echo "" >> dist/build_report.md
+          echo "### Built artifacts:" >> dist/build_report.md
+          ls -lh dist >> dist/build_report.md
+          echo "" >> dist/build_report.md
+          echo "### Checksums (SHA256):" >> dist/build_report.md
+          cd dist
+          sha256sum * >> build_report.md
+          cd ..
+        shell: bash # Ensure bash is used for commands like sha256sum
+
       - name: Archive production artifacts
         uses: actions/upload-artifact@v4
         with:
           name: fastanime_debug_build
           path: |
             dist
+            build_report.md
