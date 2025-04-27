@@ -22,19 +22,19 @@ def login(config: "Config", status, erase):
     if status:
         is_logged_in = True if config.user else False
         message = (
-            "You are logged in :smile:"
+            "Successfully logged in...."
             if is_logged_in
-            else "You aren't logged in :cry:"
+            else "Fail to login"
         )
         print(message)
         print(config.user)
         exit(0)
     elif erase:
         if Confirm.ask(
-            "Are you sure you want to erase your login status", default=False
+            "Do you want to erase your login status", default=False
         ):
             config.update_user({})
-            print("Success")
+            print("Successfully erased....")
             exit(0)
         else:
             exit(1)
