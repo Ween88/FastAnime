@@ -6,6 +6,7 @@ from .. import __version__
 from ..libs.anime_provider import SERVERS_AVAILABLE, anime_sources
 from .commands import LazyGroup
 
+
 commands = {
     "search": "search.search",
     "download": "download.download",
@@ -17,6 +18,7 @@ commands = {
     "update": "update.update",
     "grab": "grab.grab",
     "serve": "serve.serve",
+    "contact": "contactUs.contact",
 }
 
 
@@ -399,3 +401,4 @@ def run_cli(
             ctx.obj.rofi_theme_confirm = rofi_theme_confirm
             Rofi.rofi_theme_confirm = rofi_theme_confirm
     ctx.obj.set_fastanime_config_environs()
+
